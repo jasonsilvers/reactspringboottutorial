@@ -13,6 +13,8 @@ import {TransitionProps} from "@material-ui/core/transitions";
 import Slide from "@material-ui/core/Slide";
 
 interface OwnProps {
+    onSuccess: () => void,
+    onFailure: (message: string) => void
 }
 
 type Props = OwnProps;
@@ -45,6 +47,15 @@ const AddStudentModal: FunctionComponent<Props> = (props) => {
         setOpen(true);
     }
 
+    const handleSuccess = () => {
+        setOpen(false);
+        props.onSuccess();
+    }
+
+    const handleFailure = (message: string) => {
+        props.onFailure(message)
+    }
+
     const handleClose = () => {
         setOpen(false);
     }
@@ -64,7 +75,7 @@ const AddStudentModal: FunctionComponent<Props> = (props) => {
                 <DialogTitle id="form-dialog-title">Add Student
                 </DialogTitle>
                 <DialogContent>
-                    <AddStudentForm  />
+                    <AddStudentForm onSuccess={handleSuccess} onFailure={handleFailure}  />
                 </DialogContent>
                 {/*<DialogActions>*/}
                 {/*    <Button onClick={handleClose} color="primary">*/}

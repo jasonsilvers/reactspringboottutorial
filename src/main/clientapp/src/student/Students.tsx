@@ -1,5 +1,4 @@
-import React, {FunctionComponent, useEffect, useReducer} from 'react';
-
+import React, {FunctionComponent, useEffect, useReducer, useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,12 +9,14 @@ import TableRow from '@material-ui/core/TableRow';
 import Avatar from "@material-ui/core/Avatar";
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
 import {Student} from "../interface/api";
-import axios from "axios";
-import {Grid} from "@material-ui/core";
+import axios, {AxiosResponse} from "axios";
+import {Grid, Snackbar} from "@material-ui/core";
 import AddStudentModal from "./AddStudentModal";
 import {getAllStudents} from './StudentDataService';
+import useSnackbar from "../hooks/useSnackbar";
+import InboxIcon from '@material-ui/icons/Inbox';
+import Typography from "@material-ui/core/Typography";
 
 interface OwnProps {
 }
@@ -93,21 +94,35 @@ const reducer = (state: State, action: Action) => {
 
 const Students: FunctionComponent<Props> = (props) => {
 
-    // const [students, setStudent] = useState<Student[]>([] as Student[]);
-    // const [error, setError] = useState(false);
-    // const [fetching, setFetching] = useState(false);
-
+    const [openSnackBar, Snackbar] = useSnackbar()
     const [state, dispatch] = useReducer(reducer, initialState)
 
     const classes = useToolbarStyles();
 
     useEffect(() => {
-        getAllStudents().then(result => {
-            dispatch({type: 'SUCCESS', payload: result.data})
-        }).catch(error => {
-            dispatch({type: 'FAILURE', payload: error.message})
-        });
+        fetchStudents();
     }, []);
+
+    const onStudentAddSuccess = () => {
+        fetchStudents()
+        openSnackBar(true, "Student Added");
+    }
+
+    const onStudentAddFailure = (message: string) => {
+        openSnackBar(true, message)
+    }
+
+    const fetchStudents = () => {
+
+        getAllStudents().then(students => {
+            console.log(students);
+            dispatch({type: 'SUCCESS', payload: students})
+        }).catch((error) => {
+            console.log(error);
+            openSnackBar(true, 'There was an error');
+            dispatch({type: 'FAILURE', payload: error.data.message})
+        });
+    }
 
     if (state.loading) {
         return (
@@ -120,7 +135,7 @@ const Students: FunctionComponent<Props> = (props) => {
     if (state.data.length > 0 && !state.loading) {
         return (
             <div className={classes.root}>
-                <Grid container direction="row" justify="center" alignItems="center" spacing={2} >
+                <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
                     <Grid item>
                         <h1 className={classes.title}>Students</h1>
                     </Grid>
@@ -151,21 +166,34 @@ const Students: FunctionComponent<Props> = (props) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-
-                <AddStudentModal />
+                <AddStudentModal onSuccess={onStudentAddSuccess} onFailure={onStudentAddFailure}/>
+                <Snackbar/>
             </div>
         );
     }
 
     if (state.error) {
         return (
-            <p>There was an error. Please refresh and try again, {state.errorMsg}</p>
+            <div>
+                <p>{state.errorMsg}</p>
+                <Snackbar/>
+            </div>
         )
     }
 
     return (
-        <div>
-            <p>No Students</p>
+        <div style={{paddingTop: 20}}>
+            <Grid container direction="column" justify="center" alignItems="center">
+                <Grid item>
+                    <InboxIcon style={{fontSize: 85}} color="disabled"/>
+                </Grid>
+                <Grid item>
+                    <Typography variant="h5" color="textSecondary">No Students Found</Typography>
+                </Grid>
+
+            </Grid>
+            <AddStudentModal onSuccess={onStudentAddSuccess} onFailure={onStudentAddFailure}/>
+            <Snackbar/>
         </div>
     )
 };

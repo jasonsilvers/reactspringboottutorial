@@ -1,10 +1,11 @@
 package com.example.training.student;
 
+import com.example.training.exception.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
+import javax.validation.Valid;
+import java.util.*;
 
 @CrossOrigin("*")
 @RequestMapping("students")
@@ -20,11 +21,17 @@ public class StudentController {
 
     @GetMapping
     public List<Student> getStudents() {
+//          return new ArrayList<Student>();
         return this.studentService.getAllStudents();
+//        throw new ApiRequestException("Oops cannot get all students");
     }
 
     @PostMapping
-    public void addNewStudent(@RequestBody Student student) {
+    public void addNewStudent(@RequestBody @Valid Student student) {
+
         System.out.println(student.toString());
+        studentService.addNewStudent(student);
+
+
     }
 }

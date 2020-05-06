@@ -4,8 +4,11 @@ import {createStyles, TextField, Theme} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import {addNewStudent} from "../student/StudentDataService";
+import useSnackbar from "../hooks/useSnackbar";
 
 interface OwnProps {
+    onSuccess: () => void
+    onFailure: (message: string) => void
 }
 
 type Props = OwnProps;
@@ -45,7 +48,6 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
             initialValues={{email: '', firstName: '', lastName: '', gender: ''}}
             validate={newStudent => {
                 const errors = {} as FormErrors;
-
                 if (!newStudent.firstName) {
                     errors.firstName = 'Required';
                 }
@@ -56,6 +58,8 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
 
                 if (!newStudent.gender) {
                     errors.gender = 'Required'
+                } else if (!['MALE', 'male', 'FEMALE', 'female'].includes(newStudent.gender)) {
+                    errors.gender = 'Gender must be (MALE, male, FEMALE, female)'
                 }
 
                 if (!newStudent.email) {
@@ -71,8 +75,13 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
 
                 addNewStudent(newStudent).then(result => {
                     setSubmitting(false);
+                    props.onSuccess();
                     console.log(result);
-                })
+                }).catch(error => {
+                    props.onFailure(error.data.message)
+                    setSubmitting(false);
+                    console.log(error);
+                });
             }}
         >
             {({
@@ -131,14 +140,15 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
                         value={values.gender}
                     />
                     {errors.gender && touched.gender && errors.gender}
-
                     <Button type="submit" disabled={isSubmitting || (touched && !isValid)}>
                         Submit
                     </Button>
                 </form>
             )}
+
         </Formik>
     );
+
 };
 
 export default AddStudentForm;

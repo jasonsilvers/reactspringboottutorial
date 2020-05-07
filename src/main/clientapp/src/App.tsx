@@ -2,8 +2,9 @@ import React from 'react';
 import './App.css';
 import Students from "./student/Students";
 import Grid from '@material-ui/core/Grid';
-import {createMuiTheme, ThemeProvider, responsiveFontSizes  } from "@material-ui/core";
+import {createMuiTheme, ThemeProvider, responsiveFontSizes} from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import {SnackbarProvider} from 'notistack';
 
 let theme = createMuiTheme({
     typography: {
@@ -21,12 +22,14 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <div>
-                <Grid container direction="column" justify="center" alignItems="center">
-                    <Students/>
-                </Grid>
-            </div>
+            <SnackbarProvider maxSnack={3}>
+                <CssBaseline/>
+                <div>
+                    <Grid container direction="column" justify="center" alignItems="center">
+                        <Students/>
+                    </Grid>
+                </div>
+            </SnackbarProvider>
         </ThemeProvider>
 
     )

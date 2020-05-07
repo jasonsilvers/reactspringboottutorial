@@ -10,13 +10,12 @@ import Avatar from "@material-ui/core/Avatar";
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Student} from "../interface/api";
-import axios, {AxiosResponse} from "axios";
 import {Grid, Snackbar} from "@material-ui/core";
 import AddStudentModal from "./AddStudentModal";
 import {getAllStudents} from './StudentDataService';
-import useSnackbar from "../hooks/useSnackbar";
 import InboxIcon from '@material-ui/icons/Inbox';
 import Typography from "@material-ui/core/Typography";
+import {useSnackbar} from "notistack";
 
 interface OwnProps {
 }
@@ -94,8 +93,8 @@ const reducer = (state: State, action: Action) => {
 
 const Students: FunctionComponent<Props> = (props) => {
 
-    const [openSnackBar, Snackbar] = useSnackbar()
-    const [state, dispatch] = useReducer(reducer, initialState)
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const classes = useToolbarStyles();
 
@@ -105,11 +104,7 @@ const Students: FunctionComponent<Props> = (props) => {
 
     const onStudentAddSuccess = () => {
         fetchStudents()
-        openSnackBar(true, "Student Added");
-    }
-
-    const onStudentAddFailure = (message: string) => {
-        openSnackBar(true, message)
+        enqueueSnackbar("Student was added!", {variant: "success"});
     }
 
     const fetchStudents = () => {
@@ -119,7 +114,7 @@ const Students: FunctionComponent<Props> = (props) => {
             dispatch({type: 'SUCCESS', payload: students})
         }).catch((error) => {
             console.log(error);
-            openSnackBar(true, 'There was an error');
+            enqueueSnackbar("Error "+ error.data.message, {variant: "error"});
             dispatch({type: 'FAILURE', payload: error.data.message})
         });
     }
@@ -166,7 +161,7 @@ const Students: FunctionComponent<Props> = (props) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <AddStudentModal onSuccess={onStudentAddSuccess} onFailure={onStudentAddFailure}/>
+                <AddStudentModal onSuccess={onStudentAddSuccess} />
                 <Snackbar/>
             </div>
         );
@@ -192,7 +187,7 @@ const Students: FunctionComponent<Props> = (props) => {
                 </Grid>
 
             </Grid>
-            <AddStudentModal onSuccess={onStudentAddSuccess} onFailure={onStudentAddFailure}/>
+            <AddStudentModal onSuccess={onStudentAddSuccess} />
             <Snackbar/>
         </div>
     )

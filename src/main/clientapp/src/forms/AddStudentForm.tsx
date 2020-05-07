@@ -4,11 +4,10 @@ import {createStyles, TextField, Theme} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import {addNewStudent} from "../student/StudentDataService";
-import useSnackbar from "../hooks/useSnackbar";
+import {useSnackbar} from "notistack";
 
 interface OwnProps {
     onSuccess: () => void
-    onFailure: (message: string) => void
 }
 
 type Props = OwnProps;
@@ -42,6 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const AddStudentForm: FunctionComponent<Props> = (props) => {
 
     const classes = useStyles();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     return (
         <Formik
@@ -78,8 +78,8 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
                     props.onSuccess();
                     console.log(result);
                 }).catch(error => {
-                    props.onFailure(error.data.message)
                     setSubmitting(false);
+                    enqueueSnackbar("Error " + error.data.message, {variant: "error"})
                     console.log(error);
                 });
             }}

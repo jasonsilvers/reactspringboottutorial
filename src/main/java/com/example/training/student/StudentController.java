@@ -31,6 +31,7 @@ public class StudentController {
 
         System.out.println(student.toString());
         studentService.addNewStudent(student);
+//        throw new ApiRequestException("Error adding student");
 
 
     }

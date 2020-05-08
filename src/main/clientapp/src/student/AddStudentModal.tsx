@@ -6,7 +6,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import AddStudentForm from "../forms/AddStudentForm";
+import AddStudentForm from "./forms/AddStudentForm";
 import {TransitionProps} from "@material-ui/core/transitions";
 import Slide from "@material-ui/core/Slide";
 
@@ -53,10 +53,6 @@ const AddStudentModal: FunctionComponent<Props> = (props) => {
         setOpen(false);
     }
 
-    const handleSave = (values: any) => {
-        console.log(values);
-    }
-
     return (
         <div>
             <Fab className={classes.fab} color="primary" aria-label="add" onClick={handleOpen}>
@@ -70,15 +66,6 @@ const AddStudentModal: FunctionComponent<Props> = (props) => {
                 <DialogContent>
                     <AddStudentForm onSuccess={handleSuccess} />
                 </DialogContent>
-                {/*<DialogActions>*/}
-                {/*    <Button onClick={handleClose} color="primary">*/}
-                {/*        Cancel*/}
-                {/*    </Button>*/}
-                {/*    <Button onClick={handleClose} color="primary">*/}
-                {/*        Ok*/}
-                {/*    </Button>*/}
-                {/*</DialogActions>*/}
-
             </Dialog>
 
         </div>

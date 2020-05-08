@@ -1,5 +1,6 @@
 package com.example.training.student;
 
+import com.example.training.course.StudentCourse;
 import com.example.training.exception.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +22,26 @@ public class StudentController {
 
     @GetMapping
     public List<Student> getStudents() {
-//          return new ArrayList<Student>();
+//      return new ArrayList<Student>();
+//      throw new ApiRequestException("Oops cannot get all students");
         return this.studentService.getAllStudents();
-//        throw new ApiRequestException("Oops cannot get all students");
+
+    }
+
+    @GetMapping("{studentId}/courses")
+    public List<StudentCourse> getStudentCourses(@PathVariable UUID studentId) {
+        System.out.println(studentId);
+//      return new ArrayList<>();
+//      throw new ApiRequestException("Oops cannot get student courses");
+        return studentService.getStudentCourses(studentId);
     }
 
     @PostMapping
     public void addNewStudent(@RequestBody @Valid Student student) {
 
         System.out.println(student.toString());
+//      throw new ApiRequestException("Error adding student");
         studentService.addNewStudent(student);
-//        throw new ApiRequestException("Error adding student");
-
 
     }
 }

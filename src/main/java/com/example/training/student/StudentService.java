@@ -1,5 +1,6 @@
 package com.example.training.student;
 
+import com.example.training.course.StudentCourse;
 import com.example.training.exception.ApiRequestException;
 import com.example.training.utils.ValidateEmail;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,6 @@ public class StudentService {
     void addNewStudent(UUID studentId, Student student) {
         UUID newStudentId = Optional.ofNullable(studentId).orElse(UUID.randomUUID());
 
-        //TODO: Verify that email is valid
-        //TODO: Verify that email is not taken
         Boolean validEmail = validateEmail.test(student.getEmail());
 
         if (!validEmail) {
@@ -45,5 +44,9 @@ public class StudentService {
         }
 
         studentDataAccessService.insertStudent(newStudentId, student);
+    }
+
+    public List<StudentCourse> getStudentCourses(UUID studentId) {
+        return this.studentDataAccessService.selectAllCoursesByStudentId(studentId);
     }
 }

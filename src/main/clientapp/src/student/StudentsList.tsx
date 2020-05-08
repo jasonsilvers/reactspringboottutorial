@@ -13,25 +13,26 @@ import {Student} from "../interface/api";
 import {Grid, Snackbar} from "@material-ui/core";
 import AddStudentModal from "./AddStudentModal";
 import {getAllStudents} from './StudentDataService';
-import InboxIcon from '@material-ui/icons/Inbox';
-import Typography from "@material-ui/core/Typography";
 import {useSnackbar} from "notistack";
-
-interface OwnProps {
-}
-
-type Props = OwnProps;
+import Button from "@material-ui/core/Button";
+import CoursesModal from "./CoursesModal";
+import {ShowCoursesState} from "../interface/state";
+import {httpActionReducer, HttpState} from "../reducers/reducers.t";
+import NoData from "../components/NoData";
 
 const useToolbarStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            width: 750,
+            width: 1000,
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(1),
             paddingBottom: theme.spacing(4)
         },
         table: {
-            minWidth: 650
+            minWidth: 800
+        },
+        head: {
+            backgroundColor: "#e1f5fe",
         },
         title: {
             flex: '1 1 100%',
@@ -50,51 +51,19 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
     })
 );
 
-type State = {
-    loading: boolean,
-    error: boolean,
-    errorMsg: string,
-    data: Student[]
-}
 
-type Action =
-    | { type: "SUCCESS"; payload: Student[] }
-    | { type: "FAILURE"; payload: string };
-
-const initialState = {
+const initialState: HttpState<Student> = {
     loading: true,
     error: false,
     errorMsg: '',
     data: []
-} as State
+};
 
-const reducer = (state: State, action: Action) => {
-    switch (action.type) {
-        case "SUCCESS": {
-            return {
-                loading: false,
-                error: false,
-                errorMsg: '',
-                data: action.payload
-            };
-        }
-        case "FAILURE": {
-            return {
-                loading: false,
-                error: true,
-                errorMsg: action.payload,
-                data: []
-            }
-        }
-        default:
-            return state;
-    }
-}
+const StudentsList: FunctionComponent<any> = () => {
 
-const Students: FunctionComponent<Props> = (props) => {
-
-    const [state, dispatch] = useReducer(reducer, initialState);
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const [state, dispatch] = useReducer( httpActionReducer<Student>(), initialState);
+    const {enqueueSnackbar} = useSnackbar();
+    const [showCourses, setShowCourse] = useState<ShowCoursesState>({open: false, student: {} as Student});
 
     const classes = useToolbarStyles();
 
@@ -107,14 +76,20 @@ const Students: FunctionComponent<Props> = (props) => {
         enqueueSnackbar("Student was added!", {variant: "success"});
     }
 
+    const closeShowCoursesModal = () => {
+        setShowCourse({...showCourses, open: false});
+    }
+
+    const handleShowCourses = (student: Student) => {
+        setShowCourse({open: true, student: student})
+    }
+
     const fetchStudents = () => {
 
         getAllStudents().then(students => {
-            console.log(students);
             dispatch({type: 'SUCCESS', payload: students})
         }).catch((error) => {
-            console.log(error);
-            enqueueSnackbar("Error "+ error.data.message, {variant: "error"});
+            enqueueSnackbar("Error " + error.data.message, {variant: "error"});
             dispatch({type: 'FAILURE', payload: error.data.message})
         });
     }
@@ -146,23 +121,36 @@ const Students: FunctionComponent<Props> = (props) => {
                                 <TableCell component="th" scope="row">Name</TableCell>
                                 <TableCell>Email</TableCell>
                                 <TableCell>Gender</TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {state.data.map((student) => (
                                 <TableRow hover key={student.studentId}>
-                                    <TableCell><Avatar
-                                        className={classes.small}>{`${student.firstName.charAt(0).toUpperCase()}${student.lastName.charAt(0).toUpperCase()}`}</Avatar></TableCell>
+                                    <TableCell>
+                                        <Avatar
+                                            className={classes.small}>{`${student.firstName.charAt(0).toUpperCase()}${student.lastName.charAt(0).toUpperCase()}`}
+                                        </Avatar>
+                                    </TableCell>
                                     <TableCell>{student.firstName} {student.lastName}</TableCell>
                                     <TableCell>{student.email}</TableCell>
                                     <TableCell>{student.gender}</TableCell>
+                                    <TableCell padding="default">
+                                        <Button variant="outlined" color="primary"
+                                                onClick={() => handleShowCourses(student)}>
+                                            View Courses
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <AddStudentModal onSuccess={onStudentAddSuccess} />
-                <Snackbar/>
+                <AddStudentModal onSuccess={onStudentAddSuccess}/>
+                {showCourses.open ?
+                    <CoursesModal showCourses={showCourses} closeModal={closeShowCoursesModal}></CoursesModal> :
+                    null
+                }
             </div>
         );
     }
@@ -171,26 +159,17 @@ const Students: FunctionComponent<Props> = (props) => {
         return (
             <div>
                 <p>{state.errorMsg}</p>
-                <Snackbar/>
             </div>
         )
     }
 
     return (
         <div style={{paddingTop: 20}}>
-            <Grid container direction="column" justify="center" alignItems="center">
-                <Grid item>
-                    <InboxIcon style={{fontSize: 85}} color="disabled"/>
-                </Grid>
-                <Grid item>
-                    <Typography variant="h5" color="textSecondary">No Students Found</Typography>
-                </Grid>
-
-            </Grid>
-            <AddStudentModal onSuccess={onStudentAddSuccess} />
+            <NoData message={'No Students'} />
+            <AddStudentModal onSuccess={onStudentAddSuccess}/>
             <Snackbar/>
         </div>
     )
 };
 
-export default Students;
+export default StudentsList;

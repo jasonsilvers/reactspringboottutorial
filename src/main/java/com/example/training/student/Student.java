@@ -25,7 +25,6 @@ public class Student {
     @NotNull
     private final Gender gender;
 
-
     public Student(@JsonProperty("studentId") UUID studentId,
                    @JsonProperty("firstName") String firstName,
                    @JsonProperty("lastName") String lastName,

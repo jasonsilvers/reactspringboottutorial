@@ -4,5 +4,5 @@ import App from './App';
 
 test('Show loading spinner', () => {
     const { getByText } = render(<App />);
-    // expect(screen.getByText("No Students")).toBeInTheDocument();
+    // expect(screen.getByText("No StudentsList")).toBeInTheDocument();
 });

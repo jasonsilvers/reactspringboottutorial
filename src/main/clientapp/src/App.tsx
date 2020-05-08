@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Students from "./student/Students";
+import StudentsList from "./student/StudentsList";
 import Grid from '@material-ui/core/Grid';
 import {createMuiTheme, ThemeProvider, responsiveFontSizes} from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -22,11 +22,11 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <SnackbarProvider maxSnack={3}>
-                <CssBaseline/>
                 <div>
                     <Grid container direction="column" justify="center" alignItems="center">
-                        <Students/>
+                        <StudentsList/>
                     </Grid>
                 </div>
             </SnackbarProvider>

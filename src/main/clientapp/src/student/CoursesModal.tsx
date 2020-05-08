@@ -83,7 +83,7 @@ const CoursesModal: FunctionComponent<Props> = ({showCourses, closeModal}) => {
             dispatch({type: 'SUCCESS', payload: error.data.message});
         });
 
-    }, []);
+    }, [showCourses, enqueueSnackbar]);
 
     return (
         <Dialog fullScreen open={showCourses.open} onClose={closeModal} TransitionComponent={Transition}>

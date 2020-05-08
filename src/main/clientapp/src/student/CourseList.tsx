@@ -21,8 +21,7 @@ const CourseList: FunctionComponent<Props> = ({courses}) => {
         <List>
             {courses.map(course => {
                 return (
-                    //No key because it will only be rerendered on modal reopen
-                    <>
+                    <Fragment key={course.courseId}>
                         <ListItem alignItems="flex-start">
                             <ListItemText primary={
                                 <Fragment>
@@ -35,7 +34,7 @@ const CourseList: FunctionComponent<Props> = ({courses}) => {
                             }/>
                         </ListItem>
                         <Divider/>
-                    </>
+                    </Fragment>
                 )
             })}
 

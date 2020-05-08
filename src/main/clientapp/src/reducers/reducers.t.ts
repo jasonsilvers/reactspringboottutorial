@@ -1,5 +1,3 @@
-import {Student} from "../interface/api";
-
 export type HttpAction<T> =
     | { type: "SUCCESS"; payload: T[] }
     | { type: "FAILURE"; payload: string };

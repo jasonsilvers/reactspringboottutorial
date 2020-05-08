@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useReducer, useState} from 'react';
+import React, {FunctionComponent, useCallback, useEffect, useReducer, useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -67,9 +67,25 @@ const StudentsList: FunctionComponent<any> = () => {
 
     const classes = useToolbarStyles();
 
+    const fetchStudents = useCallback(() => {
+        let message: string;
+        getAllStudents().then(students => {
+            dispatch({type: 'SUCCESS', payload: students})
+        }).catch((error) => {
+            if (error) {
+                message = error.data.message;
+                dispatch({type: 'FAILURE', payload: message})
+            } else {
+                message = 'Error Connecting to server'
+                dispatch({type: 'FAILURE', payload: message});
+            }
+            enqueueSnackbar(message, {variant: "error"});
+        });
+    }, [enqueueSnackbar])
+
     useEffect(() => {
         fetchStudents();
-    }, []);
+    }, [fetchStudents, enqueueSnackbar]);
 
     const onStudentAddSuccess = () => {
         fetchStudents()
@@ -84,21 +100,7 @@ const StudentsList: FunctionComponent<any> = () => {
         setShowCourse({open: true, student: student})
     }
 
-    const fetchStudents = () => {
-        let message: string;
-        getAllStudents().then(students => {
-            dispatch({type: 'SUCCESS', payload: students})
-        }).catch((error) => {
-            if (error) {
-                message = error.data.message;
-                dispatch({type: 'FAILURE', payload: message})
-            } else {
-                message = 'Error Connecting to server'
-                dispatch({type: 'FAILURE', payload: message});
-            }
-            enqueueSnackbar(message, {variant: "error"});
-        });
-    }
+
 
     if (state.loading) {
         return (

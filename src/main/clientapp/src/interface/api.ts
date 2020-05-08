@@ -8,7 +8,7 @@ export interface Student {
 }
 
 export interface StudentCourse {
-    courseId: String;
+    courseId: string;
     name: string;
     description: string;
     department: string;

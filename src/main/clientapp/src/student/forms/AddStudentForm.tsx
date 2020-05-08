@@ -1,9 +1,9 @@
-import React, {FunctionComponent, useState} from 'react';
+import React, {FunctionComponent} from 'react';
 import {Formik} from "formik";
 import {createStyles, TextField, Theme} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
-import {addNewStudent} from "../student/StudentDataService";
+import {addNewStudent} from "../StudentDataService";
 import {useSnackbar} from "notistack";
 
 interface OwnProps {
@@ -41,11 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
 const AddStudentForm: FunctionComponent<Props> = (props) => {
 
     const classes = useStyles();
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const { enqueueSnackbar } = useSnackbar();
 
     return (
         <Formik
-            initialValues={{email: '', firstName: '', lastName: '', gender: ''}}
+            initialValues={{email: '', firstName: '', lastName: '', gender: ''} as FormValues}
             validate={newStudent => {
                 const errors = {} as FormErrors;
                 if (!newStudent.firstName) {

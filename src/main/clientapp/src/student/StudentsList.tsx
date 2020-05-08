@@ -61,7 +61,7 @@ const initialState: HttpState<Student> = {
 
 const StudentsList: FunctionComponent<any> = () => {
 
-    const [state, dispatch] = useReducer( httpActionReducer<Student>(), initialState);
+    const [state, dispatch] = useReducer(httpActionReducer<Student>(), initialState);
     const {enqueueSnackbar} = useSnackbar();
     const [showCourses, setShowCourse] = useState<ShowCoursesState>({open: false, student: {} as Student});
 
@@ -85,12 +85,18 @@ const StudentsList: FunctionComponent<any> = () => {
     }
 
     const fetchStudents = () => {
-
+        let message: string;
         getAllStudents().then(students => {
             dispatch({type: 'SUCCESS', payload: students})
         }).catch((error) => {
-            enqueueSnackbar("Error " + error.data.message, {variant: "error"});
-            dispatch({type: 'FAILURE', payload: error.data.message})
+            if (error) {
+                message = error.data.message;
+                dispatch({type: 'FAILURE', payload: message})
+            } else {
+                message = 'Error Connecting to server'
+                dispatch({type: 'FAILURE', payload: message});
+            }
+            enqueueSnackbar(message, {variant: "error"});
         });
     }
 
@@ -165,7 +171,7 @@ const StudentsList: FunctionComponent<any> = () => {
 
     return (
         <div style={{paddingTop: 20}}>
-            <NoData message={'No Students'} />
+            <NoData message={'No Students'}/>
             <AddStudentModal onSuccess={onStudentAddSuccess}/>
             <Snackbar/>
         </div>

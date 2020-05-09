@@ -20,6 +20,7 @@ export const httpActionReducer = <T>() =>(state: HttpState<T>, action: HttpActio
             };
         }
         case "FAILURE": {
+
             return {
                 loading: false,
                 error: true,

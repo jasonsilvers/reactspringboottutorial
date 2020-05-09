@@ -16,6 +16,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import CourseList from "./CourseList";
 import NoData from "../components/NoData";
 import {useSnackbar} from "notistack";
+import {Grid} from "@material-ui/core";
 
 interface OwnProps {
     showCourses: ShowCoursesState;
@@ -60,9 +61,11 @@ const initialState: HttpState<StudentCourse> = {
 const IsLoading: FunctionComponent<any> = () => {
 
     return (
-        <div>
-            <CircularProgress/>
-        </div>
+        <Grid container direction="row" alignItems="center" justify="center">
+            <div style={{padding: 20}}>
+                <CircularProgress/>
+            </div>
+        </Grid>
     )
 };
 
@@ -73,14 +76,19 @@ const CoursesModal: FunctionComponent<Props> = ({showCourses, closeModal}) => {
 
     useEffect(() => {
         console.log(showCourses.student)
-
+        let message: string;
         getStudentsCourses(showCourses.student.studentId).then(result => {
             console.log(result);
             dispatch({type: "SUCCESS", payload: result});
         }).catch(error => {
-            console.log(error);
-            enqueueSnackbar("Error " + error.data.message, {variant: "error"});
-            dispatch({type: 'SUCCESS', payload: error.data.message});
+            if (error) {
+                message = error.data.message;
+                dispatch({type: 'FAILURE', payload: message})
+            } else {
+                message = 'Error Connecting to server'
+                dispatch({type: 'FAILURE', payload: message});
+            }
+            enqueueSnackbar(message, {variant: "error"});
         });
 
     }, [showCourses, enqueueSnackbar]);
@@ -99,7 +107,7 @@ const CoursesModal: FunctionComponent<Props> = ({showCourses, closeModal}) => {
             </AppBar>
 
             {state.loading ? <IsLoading/> : <CourseList courses={state.data}/>}
-            {state.data.length === 0 ? <NoData message={'No Courses'}/> : null}
+            {state.data.length === 0 && !state.loading ? <NoData message={'No Courses'}/> : null}
         </Dialog>
     );
 };

@@ -100,12 +100,18 @@ const StudentsList: FunctionComponent<any> = () => {
         setShowCourse({open: true, student: student})
     }
 
-
-
     if (state.loading) {
         return (
             <div className={classes.spinner}>
                 <CircularProgress/>
+            </div>
+        )
+    }
+
+    if (state.error) {
+        return (
+            <div>
+                <p>{state.errorMsg}</p>
             </div>
         )
     }
@@ -161,14 +167,6 @@ const StudentsList: FunctionComponent<any> = () => {
                 }
             </div>
         );
-    }
-
-    if (state.error) {
-        return (
-            <div>
-                <p>{state.errorMsg}</p>
-            </div>
-        )
     }
 
     return (

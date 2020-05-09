@@ -34,14 +34,14 @@ const useStyles = makeStyles((theme: Theme) =>
             '& .MuiTextField-root': {
                 paddingBottom: theme.spacing(2),
             },
-        },
+        }
     }),
 );
 
 const AddStudentForm: FunctionComponent<Props> = (props) => {
 
     const classes = useStyles();
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     return (
         <Formik
@@ -72,16 +72,15 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
                 return errors;
             }}
             onSubmit={(newStudent, {setSubmitting}) => {
-
                 addNewStudent(newStudent).then(result => {
-                    setSubmitting(false);
                     props.onSuccess();
                     console.log(result);
                 }).catch(error => {
-                    setSubmitting(false);
                     enqueueSnackbar("Error " + error.data.message, {variant: "error"})
                     console.log(error);
                 });
+
+                setSubmitting(false);
             }}
         >
             {({
@@ -98,6 +97,8 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
               }) => (
                 <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField
+                        error={errors.email && touched.email && errors.email ? true : false}
+                        helperText={errors.email}
                         type="email"
                         name="email"
                         label="E-Mail"
@@ -106,9 +107,10 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
                         onBlur={handleBlur}
                         value={values.email}
                     />
-                    {errors.email && touched.email && errors.email}
 
                     <TextField
+                        error={errors.firstName && touched.firstName && errors.firstName ? true : false}
+                        helperText={errors.firstName}
                         type="firstName"
                         name="firstName"
                         label="First Name"
@@ -117,9 +119,11 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
                         onBlur={handleBlur}
                         value={values.firstName}
                     />
-                    {errors.firstName && touched.firstName && errors.firstName}
+
 
                     <TextField
+                        error={errors.lastName && touched.lastName && errors.lastName ? true : false}
+                        helperText={errors.lastName}
                         type="lastName"
                         name="lastName"
                         label="Last Name"
@@ -127,10 +131,11 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.lastName}
-                    />
-                    {errors.lastName && touched.lastName && errors.lastName}
 
+                    />
                     <TextField
+                        error={errors.gender && touched.gender && errors.gender ? true : false}
+                        helperText={errors.gender}
                         type="gender"
                         name="gender"
                         label="Gender"
@@ -139,7 +144,7 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
                         onBlur={handleBlur}
                         value={values.gender}
                     />
-                    {errors.gender && touched.gender && errors.gender}
+
                     <Button type="submit" disabled={isSubmitting || (touched && !isValid)}>
                         Submit
                     </Button>

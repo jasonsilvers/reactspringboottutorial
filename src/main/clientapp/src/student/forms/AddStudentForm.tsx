@@ -82,6 +82,7 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
 
                 setSubmitting(false);
             }}
+
         >
             {({
                   values,
@@ -97,7 +98,7 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
               }) => (
                 <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField
-                        error={errors.email && touched.email && errors.email ? true : false}
+                        error={!!(touched.email && errors.email )}
                         helperText={errors.email}
                         type="email"
                         name="email"
@@ -107,9 +108,8 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
                         onBlur={handleBlur}
                         value={values.email}
                     />
-
                     <TextField
-                        error={errors.firstName && touched.firstName && errors.firstName ? true : false}
+                        error={!!(errors.firstName && touched.firstName)}
                         helperText={errors.firstName}
                         type="firstName"
                         name="firstName"
@@ -122,7 +122,7 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
 
 
                     <TextField
-                        error={errors.lastName && touched.lastName && errors.lastName ? true : false}
+                        error={!!(errors.lastName && touched.lastName)}
                         helperText={errors.lastName}
                         type="lastName"
                         name="lastName"
@@ -134,7 +134,7 @@ const AddStudentForm: FunctionComponent<Props> = (props) => {
 
                     />
                     <TextField
-                        error={errors.gender && touched.gender && errors.gender ? true : false}
+                        error={!!(errors.gender && touched.gender)}
                         helperText={errors.gender}
                         type="gender"
                         name="gender"

@@ -84,8 +84,9 @@ const StudentsList: FunctionComponent<any> = () => {
     }, [enqueueSnackbar])
 
     useEffect(() => {
+        console.log('use effect is running');
         fetchStudents();
-    }, [fetchStudents, enqueueSnackbar]);
+    }, [fetchStudents]);
 
     const onStudentAddSuccess = () => {
         fetchStudents()

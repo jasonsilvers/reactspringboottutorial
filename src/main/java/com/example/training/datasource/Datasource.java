@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class Datasource {
 
     //This will instantiate the datasource so we can use
-    //Injects properties from application.yml
+    //Injects properties from application-prod.yml
     @Bean
     @ConfigurationProperties("app.datasource")
     public HikariDataSource hikariDataSource() {

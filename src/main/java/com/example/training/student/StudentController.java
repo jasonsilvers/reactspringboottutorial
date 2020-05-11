@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import java.util.*;
 
 @CrossOrigin("*")
-@RequestMapping("students")
+@RequestMapping("api/v1/students")
 @RestController
 public class StudentController {
 

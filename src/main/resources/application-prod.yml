@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+
+server:
+  port: 5000
+
+app:
+  datasource:
+    jdbc-url: jdbc:postgresql://fullstackspringbootdb.ck3k4uicjeif.us-east-2.rds.amazonaws.com:5432/fullstackspringbootdb
+    username: silverarrow
+    password: silverarrow
+    pool-size: 30

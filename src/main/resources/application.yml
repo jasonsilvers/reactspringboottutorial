@@ -1,6 +1,6 @@
-server:
-  servlet:
-    context-path: /api/v1
+spring:
+  profiles:
+    active: @spring.profiles.active@
 
 app:
   datasource:

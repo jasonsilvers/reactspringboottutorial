@@ -7,7 +7,7 @@ server:
 
 app:
   datasource:
-    jdbc-url: jdbc:postgresql://fullstackspringbootdb.ck3k4uicjeif.us-east-2.rds.amazonaws.com:5432/fullstackspringbootdb
-    username: silverarrow
-    password: silverarrow
+    jdbc-url: jdbc:postgres://paatijsmvjgmcq:d228ddb2377543ff30c1b88351e1c07345ff247b7263f62338e3e364f9c5a6a7@ec2-52-207-25-133.compute-1.amazonaws.com:5432/dc40cq65pt43ld
+    username: paatijsmvjgmcq
+    password: d228ddb2377543ff30c1b88351e1c07345ff247b7263f62338e3e364f9c5a6a7
     pool-size: 30

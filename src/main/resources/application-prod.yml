@@ -7,7 +7,7 @@ server:
 
 app:
   datasource:
-    jdbc-url: jdbc:postgres://paatijsmvjgmcq:d228ddb2377543ff30c1b88351e1c07345ff247b7263f62338e3e364f9c5a6a7@ec2-52-207-25-133.compute-1.amazonaws.com:5432/dc40cq65pt43ld
+    jdbc-url: ${DATABASE_URL}
     username: paatijsmvjgmcq
     password: ${DATABASE_PASSWORD}
     pool-size: 30

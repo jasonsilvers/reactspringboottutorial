@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {StudentCourse, Student} from "../interface/api";
 
-export const getAllStudents: () => Promise<Student[]> = () => axios.get<Student[]>("http://localhost:8080/api/v1/students")
+export const getAllStudents: () => Promise<Student[]> = () => axios.get<Student[]>("/api/v1/students")
     .then(response => {
         return Promise.resolve(response.data as Student[]);
     })
@@ -11,7 +11,7 @@ export const getAllStudents: () => Promise<Student[]> = () => axios.get<Student[
     });
 
 export const addNewStudent = (student: any) => {
-    return axios.post<boolean>("http://localhost:8080/api/v1/students", JSON.stringify(student), {
+    return axios.post<boolean>("/api/v1/students", JSON.stringify(student), {
         headers: {
             'content-type': 'application/json'
         }
@@ -23,7 +23,7 @@ export const addNewStudent = (student: any) => {
     });
 }
 
-export const getStudentsCourses = (studentId: string): Promise<StudentCourse[]> => axios.get<StudentCourse[]>(`http://localhost:8080/api/v1/students/${studentId}/courses`)
+export const getStudentsCourses = (studentId: string): Promise<StudentCourse[]> => axios.get<StudentCourse[]>(`/api/v1/students/${studentId}/courses`)
     .then(response => {
         return Promise.resolve(response.data as StudentCourse[]);
     })

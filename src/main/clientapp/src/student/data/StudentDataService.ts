@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {StudentCourse, Student} from "../interface/api";
+import {StudentCourse, Student} from "../../interface/api";
 
 export const getAllStudents: () => Promise<Student[]> = () => axios.get<Student[]>("/api/v1/students")
     .then(response => {
@@ -21,6 +21,17 @@ export const addNewStudent = (student: any) => {
         console.log(error.response);
         return Promise.reject(error.response)
     });
+}
+
+export const deleteStudent = (studentId: string) => {
+    return axios.delete(`api/v1/students/${studentId}`)
+        .then(response => {
+            console.log(response);
+            return Promise.resolve(response.data);
+        }).catch(error => {
+            console.log(error);
+            return Promise.reject(error.response);
+        })
 }
 
 export const getStudentsCourses = (studentId: string): Promise<StudentCourse[]> => axios.get<StudentCourse[]>(`/api/v1/students/${studentId}/courses`)

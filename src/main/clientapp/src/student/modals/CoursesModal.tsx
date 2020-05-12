@@ -8,13 +8,13 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import {TransitionProps} from '@material-ui/core/transitions';
-import {ShowCoursesState} from "../interface/state";
-import {getStudentsCourses} from "./StudentDataService";
-import {StudentCourse} from "../interface/api";
-import {httpActionReducer, HttpState} from "../reducers/reducers.t";
+import {ShowCoursesState} from "../../interface/state";
+import {getStudentsCourses} from "../data/StudentDataService";
+import {StudentCourse} from "../../interface/api";
+import {httpActionReducer, HttpState} from "../../reducers/reducers.t";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import CourseList from "./CourseList";
-import NoData from "../components/NoData";
+import StudentCoursesList from "../StudentCoursesList";
+import NoData from "../../components/NoData";
 import {useSnackbar} from "notistack";
 import {Grid} from "@material-ui/core";
 
@@ -106,7 +106,7 @@ const CoursesModal: FunctionComponent<Props> = ({showCourses, closeModal}) => {
                 </Toolbar>
             </AppBar>
 
-            {state.loading ? <IsLoading/> : <CourseList courses={state.data}/>}
+            {state.loading ? <IsLoading/> : <StudentCoursesList courses={state.data}/>}
             {state.data.length === 0 && !state.loading ? <NoData message={'No Courses'}/> : null}
         </Dialog>
     );

@@ -174,22 +174,24 @@ const StudentsList: FunctionComponent<any> = () => {
                                     <TableCell>{student.email}</TableCell>
                                     <TableCell>{student.gender}</TableCell>
                                     <TableCell padding="default">
-                                        <Button variant="outlined" color="primary"
-                                                onClick={() => handleShowCourses(student)}>
-                                            View Courses
-                                        </Button>
-                                        <IconButton aria-label="edit" onClick={() => setSelectedEditStudent({
-                                            open: true,
-                                            student: student
-                                        })}>
-                                            <EditIcon/>
-                                        </IconButton>
-                                        <IconButton aria-label="delete" onClick={() => setDeleteStudent({
-                                            open: true,
-                                            studentId: student.studentId
-                                        })}>
-                                            <DeleteForeverIcon/>
-                                        </IconButton>
+                                        <Grid container justify="flex-end">
+                                            <Button variant="outlined" color="primary"
+                                                    onClick={() => handleShowCourses(student)}>
+                                                View Courses
+                                            </Button>
+                                            <IconButton aria-label="edit" onClick={() => setSelectedEditStudent({
+                                                open: true,
+                                                student: student
+                                            })}>
+                                                <EditIcon/>
+                                            </IconButton>
+                                            <IconButton aria-label="delete" onClick={() => setDeleteStudent({
+                                                open: true,
+                                                studentId: student.studentId
+                                            })}>
+                                                <DeleteForeverIcon/>
+                                            </IconButton>
+                                        </Grid>
                                     </TableCell>
                                 </TableRow>
                             ))}

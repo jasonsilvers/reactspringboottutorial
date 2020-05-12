@@ -175,7 +175,7 @@ const StudentsList: FunctionComponent<any> = () => {
                                     <TableCell>{student.gender}</TableCell>
                                     <TableCell padding="default">
                                         <Grid container justify="flex-end">
-                                            <Button variant="outlined" color="primary"
+                                            <Button size="small" variant="outlined" color="primary"
                                                     onClick={() => handleShowCourses(student)}>
                                                 View Courses
                                             </Button>

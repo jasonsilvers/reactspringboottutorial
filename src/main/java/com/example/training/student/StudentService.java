@@ -5,6 +5,7 @@ import com.example.training.exception.ApiRequestException;
 import com.example.training.utils.ValidateEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,5 +53,18 @@ public class StudentService {
 
     public void deleteStudent(UUID studentId) {
         studentDataAccessService.removeStudent(studentId);
+    }
+
+    public void updateStudent(UUID studentId, Student student) {
+
+        Optional.ofNullable(student.getFirstName())
+                .filter(fistName -> !StringUtils.isEmpty(fistName))
+                .map(StringUtils::capitalize)
+                .ifPresent(firstName -> studentDataAccessService.updateFirstName(studentId, firstName));
+
+        Optional.ofNullable(student.getLastName())
+                .filter(lastName -> !StringUtils.isEmpty(lastName))
+                .map(StringUtils::capitalize)
+                .ifPresent(lastName -> studentDataAccessService.updateLastName(studentId, lastName));
     }
 }

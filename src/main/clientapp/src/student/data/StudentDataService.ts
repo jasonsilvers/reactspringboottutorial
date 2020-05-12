@@ -23,8 +23,21 @@ export const addNewStudent = (student: any) => {
     });
 }
 
+export const updateStudent = (student: any, studentId: string) => {
+    console.log(student)
+    return axios.put(`/api/v1/students/${studentId}`, JSON.stringify(student), {
+        headers: {
+            'content-type': 'application/json'
+        }
+    }).then(response => {
+        return Promise.resolve(response.data);
+    }).catch(error => {
+        return Promise.reject(error.response);
+    })
+}
+
 export const deleteStudent = (studentId: string) => {
-    return axios.delete(`api/v1/students/${studentId}`)
+    return axios.delete(`/api/v1/students/${studentId}`)
         .then(response => {
             console.log(response);
             return Promise.resolve(response.data);

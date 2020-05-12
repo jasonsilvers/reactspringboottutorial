@@ -45,6 +45,11 @@ public class StudentController {
 
     }
 
+    @PutMapping("{studentId}")
+    public void updateStudent(@PathVariable UUID studentId, @RequestBody Student student) {
+        studentService.updateStudent(studentId, student);
+    }
+
     @DeleteMapping("{studentId}")
     public void deleteStudent(@PathVariable UUID studentId) {
         studentService.deleteStudent(studentId);

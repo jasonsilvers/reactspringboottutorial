@@ -23,6 +23,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteStudentModal from "./modals/DeleteStudentModal";
+import EditStudentModal from "./modals/EditStudentModal";
 
 const useToolbarStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -69,6 +70,7 @@ const StudentsList: FunctionComponent<any> = () => {
     const {enqueueSnackbar} = useSnackbar();
     const [showCourses, setShowCourse] = useState<ShowCoursesState>({open: false, student: {} as Student});
     const [deleteStudent, setDeleteStudent] = useState({open: false, studentId: ''});
+    const [selectedEditStudentState, setSelectedEditStudent] = useState({open: false, student: {} as Student});
     const classes = useToolbarStyles();
 
     const fetchStudents = useCallback(() => {
@@ -103,6 +105,15 @@ const StudentsList: FunctionComponent<any> = () => {
             fetchStudents()
             enqueueSnackbar("Student was deleted", {variant: "success"});
         }
+    }
+
+    const onStudentEditSuccess = () => {
+        fetchStudents()
+        enqueueSnackbar("Student was updated!", {variant: "success"});
+    }
+
+    const closeEditStudentModal = () => {
+        setSelectedEditStudent({...selectedEditStudentState, open: false});
     }
 
     const closeShowCoursesModal = () => {
@@ -167,7 +178,10 @@ const StudentsList: FunctionComponent<any> = () => {
                                                 onClick={() => handleShowCourses(student)}>
                                             View Courses
                                         </Button>
-                                        <IconButton aria-label="edit">
+                                        <IconButton aria-label="edit" onClick={() => setSelectedEditStudent({
+                                            open: true,
+                                            student: student
+                                        })}>
                                             <EditIcon/>
                                         </IconButton>
                                         <IconButton aria-label="delete" onClick={() => setDeleteStudent({
@@ -183,6 +197,8 @@ const StudentsList: FunctionComponent<any> = () => {
                     </Table>
                 </TableContainer>
                 <AddStudentModal onSuccess={onStudentAddSuccess}/>
+                <EditStudentModal editStudentState={selectedEditStudentState} closeModal={closeEditStudentModal}
+                                  onSuccess={onStudentEditSuccess}/>
                 <DeleteStudentModal deleteStudentState={deleteStudent} closeModal={closeDeleteStudentModal}/>
                 {showCourses.open ?
                     <CoursesModal showCourses={showCourses} closeModal={closeShowCoursesModal}/> :

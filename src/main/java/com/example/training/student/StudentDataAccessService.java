@@ -73,6 +73,30 @@ public class StudentDataAccessService {
         return jdbcTemplate.update(sql, newStudentId, student.getFirstName(), student.getLastName(), student.getEmail(), student.getGender().name().toUpperCase());
     }
 
+    int updateEmail(UUID studentId, String email) {
+        String sql = "" +
+                "UPDATE student " +
+                "SET email = ? " +
+                "WHERE student_id = ?";
+        return jdbcTemplate.update(sql, email, studentId);
+    }
+
+    int updateFirstName(UUID studentId, String firstName) {
+        String sql = "" +
+                "UPDATE student " +
+                "SET first_name = ? " +
+                "WHERE student_id = ?";
+        return jdbcTemplate.update(sql, firstName, studentId);
+    }
+
+    int updateLastName(UUID studentId, String lastName) {
+        String sql = "" +
+                "UPDATE student " +
+                "SET last_name = ? " +
+                "WHERE student_id = ?";
+        return jdbcTemplate.update(sql, lastName, studentId);
+    }
+
     private RowMapper<Student> mapStudentFromDb() {
         return (resultSet, i) -> {
             String studentIdStr = resultSet.getString("student_id");

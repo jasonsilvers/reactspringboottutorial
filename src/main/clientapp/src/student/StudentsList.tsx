@@ -99,8 +99,10 @@ const StudentsList: FunctionComponent<any> = () => {
 
     const closeDeleteStudentModal = (refresh: boolean) => {
         setDeleteStudent({...deleteStudent, open: false});
-        fetchStudents()
-        enqueueSnackbar("Student was deleted", {variant: "success"});
+        if (refresh) {
+            fetchStudents()
+            enqueueSnackbar("Student was deleted", {variant: "success"});
+        }
     }
 
     const closeShowCoursesModal = () => {
@@ -168,7 +170,10 @@ const StudentsList: FunctionComponent<any> = () => {
                                         <IconButton aria-label="edit">
                                             <EditIcon/>
                                         </IconButton>
-                                        <IconButton aria-label="delete" onClick={() => setDeleteStudent({open: true, studentId: student.studentId})}>
+                                        <IconButton aria-label="delete" onClick={() => setDeleteStudent({
+                                            open: true,
+                                            studentId: student.studentId
+                                        })}>
                                             <DeleteForeverIcon/>
                                         </IconButton>
                                     </TableCell>
@@ -178,7 +183,7 @@ const StudentsList: FunctionComponent<any> = () => {
                     </Table>
                 </TableContainer>
                 <AddStudentModal onSuccess={onStudentAddSuccess}/>
-                <DeleteStudentModal deleteStudentState={deleteStudent} closeModal={closeDeleteStudentModal} />
+                <DeleteStudentModal deleteStudentState={deleteStudent} closeModal={closeDeleteStudentModal}/>
                 {showCourses.open ?
                     <CoursesModal showCourses={showCourses} closeModal={closeShowCoursesModal}/> :
                     null

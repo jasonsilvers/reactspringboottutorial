@@ -11,7 +11,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-const CourseList: FunctionComponent<Props> = ({courses}) => {
+const StudentCoursesList: FunctionComponent<Props> = ({courses}) => {
     console.log(courses)
     if (typeof courses === "string") {
         return null;
@@ -42,4 +42,4 @@ const CourseList: FunctionComponent<Props> = ({courses}) => {
     )
 };
 
-export default CourseList;
+export default StudentCoursesList;

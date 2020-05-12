@@ -3,7 +3,7 @@ import {Formik} from "formik";
 import {createStyles, TextField, Theme} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
-import {addNewStudent} from "../StudentDataService";
+import {addNewStudent} from "../data/StudentDataService";
 import {useSnackbar} from "notistack";
 
 interface OwnProps {

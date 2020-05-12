@@ -44,4 +44,9 @@ public class StudentController {
         studentService.addNewStudent(student);
 
     }
+
+    @DeleteMapping("{studentId}")
+    public void deleteStudent(@PathVariable UUID studentId) {
+        studentService.deleteStudent(studentId);
+    }
 }

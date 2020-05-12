@@ -47,6 +47,10 @@ public class StudentService {
     }
 
     public List<StudentCourse> getStudentCourses(UUID studentId) {
-        return this.studentDataAccessService.selectAllCoursesByStudentId(studentId);
+        return studentDataAccessService.selectAllCoursesByStudentId(studentId);
+    }
+
+    public void deleteStudent(UUID studentId) {
+        studentDataAccessService.removeStudent(studentId);
     }
 }

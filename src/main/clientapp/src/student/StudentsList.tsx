@@ -11,19 +11,23 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Student} from "../interface/api";
 import {Grid, Snackbar} from "@material-ui/core";
-import AddStudentModal from "./AddStudentModal";
-import {getAllStudents} from './StudentDataService';
+import AddStudentModal from "./modals/AddStudentModal";
+import {getAllStudents} from './data/StudentDataService';
 import {useSnackbar} from "notistack";
 import Button from "@material-ui/core/Button";
-import CoursesModal from "./CoursesModal";
+import CoursesModal from "./modals/CoursesModal";
 import {ShowCoursesState} from "../interface/state";
 import {httpActionReducer, HttpState} from "../reducers/reducers.t";
 import NoData from "../components/NoData";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteStudentModal from "./modals/DeleteStudentModal";
 
 const useToolbarStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            width: 1000,
+            width: '100%',
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(1),
             paddingBottom: theme.spacing(4)
@@ -64,7 +68,7 @@ const StudentsList: FunctionComponent<any> = () => {
     const [state, dispatch] = useReducer(httpActionReducer<Student>(), initialState);
     const {enqueueSnackbar} = useSnackbar();
     const [showCourses, setShowCourse] = useState<ShowCoursesState>({open: false, student: {} as Student});
-
+    const [deleteStudent, setDeleteStudent] = useState({open: false, studentId: ''});
     const classes = useToolbarStyles();
 
     const fetchStudents = useCallback(() => {
@@ -91,6 +95,12 @@ const StudentsList: FunctionComponent<any> = () => {
     const onStudentAddSuccess = () => {
         fetchStudents()
         enqueueSnackbar("Student was added!", {variant: "success"});
+    }
+
+    const closeDeleteStudentModal = (refresh: boolean) => {
+        setDeleteStudent({...deleteStudent, open: false});
+        fetchStudents()
+        enqueueSnackbar("Student was deleted", {variant: "success"});
     }
 
     const closeShowCoursesModal = () => {
@@ -155,6 +165,12 @@ const StudentsList: FunctionComponent<any> = () => {
                                                 onClick={() => handleShowCourses(student)}>
                                             View Courses
                                         </Button>
+                                        <IconButton aria-label="edit">
+                                            <EditIcon/>
+                                        </IconButton>
+                                        <IconButton aria-label="delete" onClick={() => setDeleteStudent({open: true, studentId: student.studentId})}>
+                                            <DeleteForeverIcon/>
+                                        </IconButton>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -162,8 +178,9 @@ const StudentsList: FunctionComponent<any> = () => {
                     </Table>
                 </TableContainer>
                 <AddStudentModal onSuccess={onStudentAddSuccess}/>
+                <DeleteStudentModal deleteStudentState={deleteStudent} closeModal={closeDeleteStudentModal} />
                 {showCourses.open ?
-                    <CoursesModal showCourses={showCourses} closeModal={closeShowCoursesModal}></CoursesModal> :
+                    <CoursesModal showCourses={showCourses} closeModal={closeShowCoursesModal}/> :
                     null
                 }
             </div>

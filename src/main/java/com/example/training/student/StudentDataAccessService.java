@@ -96,4 +96,8 @@ public class StudentDataAccessService {
     }
 
 
+    int removeStudent(UUID studentId) {
+        String sql = "DELETE FROM student WHERE student_id = ?";
+        return jdbcTemplate.update(sql, studentId);
+    }
 }
